@@ -106,7 +106,49 @@ namespace po_cw3
 
         private void button15_Click(object sender, EventArgs e)
         {
-            
+            double result = 0;
+            double currentNumber = 0;
+            char operation = '+';
+
+            foreach (string value in values)
+            {
+                if (double.TryParse(value, out double number))
+                {
+                    switch (operation)
+                    {
+                        case '+':
+                            result += currentNumber;
+                            currentNumber = number;
+                            break;
+                        case '-':
+                            result += currentNumber;
+                            currentNumber = -number;
+                            break;
+                        case '*':
+                            currentNumber *= number;
+                            break;
+                        case '/':
+                            if (number != 0)
+                            {
+                                currentNumber /= number;
+                            }
+                            else
+                            {
+                                textBoxOutput.Text = "Error: Division by zero";
+                                return;
+                            }
+                            break;
+                    }
+                }
+                else if (value.Length == 1)
+                {
+                    operation = value[0];
+                }
+            }
+
+            result += currentNumber;
+            textBoxOutput.Text = result.ToString();
+            values.Clear();
         }
     }
 }
