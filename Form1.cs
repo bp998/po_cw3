@@ -16,26 +16,59 @@ namespace po_cw3
         string value2;
         string beetwen;
 
-
-        private void calc(int value1, int value2, string beetwen)
+        private void error(string text)
         {
+            if(text != null)
+            {
+                textBoxOutput.Text = text;
+            } else
+            {
+                textBoxOutput.Text = "Nieprawidłowe dane";
+            }
+            beetwen = null;
+            value1 = null;
+            value2 = null;
+        }
+
+
+        private void calc(double valueA, double valueB, string beetwen)
+        {
+            double result;
 
             if(beetwen == "+")
             {
-                textBoxOutput.Text = (value1 + value2).ToString();           
+                result = Math.Round((valueA + valueB)* 100) / 100;
+                textBoxOutput.Text = (result).ToString();
+                value1 = result.ToString();
+
             }
             else if(beetwen == "-")
             {
-                textBoxOutput.Text = (value1 - value2).ToString();
+                result = Math.Round((valueA - valueB) * 100) / 100;
+                textBoxOutput.Text = (result).ToString();
+                value1 = result.ToString();
             }
             else if(beetwen == "*")
             {
-                textBoxOutput.Text = (value1 * value2).ToString();
+                result = Math.Round((valueA * valueB) * 100) / 100;  
+                textBoxOutput.Text = (result).ToString();
+                value1 = result.ToString();
             }
             else if(beetwen == "/")
             {
-                textBoxOutput.Text = (value1 / value2).ToString();
+                if (valueB == 0)
+                {
+                    error("Nie dziel przez 0");
+                }
+                else
+                {
+                    result = Math.Round((valueA / valueB) * 100) / 100;
+                    textBoxOutput.Text = (result).ToString();
+                    value1 = result.ToString();
+                }
             }
+            value2 = null;
+            beetwen = null;
         }
 
         private bool tryAdd(string value)
@@ -51,6 +84,10 @@ namespace po_cw3
         }
         private void addValue(string value)
         {
+            if(textBoxOutput.Text == "Nieprawidłowe dane" || textBoxOutput.Text == "Nie dziel przez 0" || textBoxOutput.Text == "Zacznij od cyfry")
+            {
+                textBoxOutput.Text = "";
+            }
             if (beetwen != null)
             {
                 value2 += value;
@@ -67,10 +104,15 @@ namespace po_cw3
         {
             if (tryAdd(value))
             {
-                calc(int.Parse(value1), int.Parse(value2), beetwen);
+                calc(double.Parse(value1), double.Parse(value2), beetwen);
             }
-            if (value == "+")
+            if (value1 == null && value2 == null)
+            { 
+                error("Zacznij od cyfry");
+            }
+            else if (value == "+")
             {
+
                 beetwen = "+";
                 textBoxOutput.Text = textBoxOutput.Text + value;
             }
@@ -168,10 +210,17 @@ namespace po_cw3
 
         private void button15_Click(object sender, EventArgs e)
         {
-            calc(int.Parse(value1), int.Parse(value2), beetwen);
-            value1 = null;
-            value2 = null;
-            beetwen = null;
+            if(value1 != null && value2 != null && beetwen != null)
+            {
+                calc(double.Parse(value1), double.Parse(value2), beetwen);
+                beetwen = null;
+                value2 = null;
+
+            } else
+            {
+               error(null);
+            }
+           
         }
         
 
@@ -180,5 +229,14 @@ namespace po_cw3
 
         }
 
+        private void button16_Click(object sender, EventArgs e)
+        {
+            value1 = null;
+            value2 = null;
+            beetwen = null;
+            textBoxOutput.Text = "";
+        }
+
+       
     }
 }
